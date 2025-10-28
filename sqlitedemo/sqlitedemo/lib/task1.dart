@@ -237,24 +237,9 @@ class LoginPage extends StatelessWidget {
 
               Column(
                 children: [
-                  ElevatedButton (
-                    onPressed: (){
-                    },
 
-
-
-
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3)
-                      ),
-
-                    ),
-                    child: Text('BUTTON',style: TextStyle(color: Colors.white),)
-                    ,),
                   Padding(
-                    padding: EdgeInsets.only(top: 200,left: 110),
+                    padding: EdgeInsets.only(top: 100,left: 50),
                     child:
 
                     ElevatedButton (

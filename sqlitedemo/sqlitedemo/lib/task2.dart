@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
 }
 
 class RegisterPage extends StatefulWidget {
+  //create a editable user object that can be null
   final User? editingUser;
 
   const RegisterPage({super.key, this.editingUser});
@@ -41,10 +42,13 @@ class _RegisterPageState extends State<RegisterPage> {
     super.initState();
     initializeDatabase();
 
+    //call from widget the object inside stful class only until not null
     if (widget.editingUser != null) {
+      //the controller fields can be edited with held values
       _idController.text = widget.editingUser!.id.toString();
       _fnameController.text = widget.editingUser!.fname;
       _lnameController.text = widget.editingUser!.lname;
+      //to convert marks in string for taking values for the controller
       _marksController.text = widget.editingUser!.marks.toString();
     }
   }
@@ -69,8 +73,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> updateUser(User user) async {
-    await database!.update('users', user.toMap(),
-        where: 'id = ?', whereArgs: [user.id]);
+    await database!
+        .update('users', user.toMap(), where: 'id = ?', whereArgs: [user.id]);
   }
 
   void clearForm() {
@@ -82,10 +86,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    //storing the object in a variable cannot be null and we call it from
+    //widget because it is still in stful class
     final isEditing = widget.editingUser != null;
 
     return Scaffold(
       appBar: AppBar(
+        //to change title when the user is editing from register to editing user
         title: Text(isEditing ? 'Edit User' : 'Register'),
         backgroundColor: Colors.deepPurpleAccent,
         foregroundColor: Colors.white,
@@ -93,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(80),
-          child: SingleChildScrollView(
+          child: Center(
             child: Column(
               children: [
                 TextField(
@@ -133,9 +140,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     final marks = int.tryParse(_marksController.text) ?? 0;
                     final id = int.tryParse(_idController.text);
 
+                    // first name and lastname cant be empty
                     if (fname.isEmpty || lname.isEmpty) return;
 
+                    //if the widget is being edited
                     if (isEditing) {
+                      //wait for updation until id isnt empty cant be chamged
                       await updateUser(User(
                         id: widget.editingUser!.id,
                         fname: fname,
@@ -145,13 +155,14 @@ class _RegisterPageState extends State<RegisterPage> {
                     } else {
                       await insertUser(
                         User(
+                          //otherwise check if id is not equal to 0 and keep the preious update
                             id: id ?? 0,
                             fname: fname,
                             lname: lname,
                             marks: marks),
                       );
                     }
-
+//clear form when insertion ends
                     clearForm();
 
                     // Move to details page after registering or updating
@@ -198,7 +209,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
   Future<void> refreshUsers() async {
     final List<Map<String, dynamic>> maps =
-    await database!.query('users', orderBy: 'id DESC');
+        await database!.query('users', orderBy: 'id DESC');
     setState(() {
       userList = List.generate(maps.length, (i) {
         return User(
@@ -227,46 +238,46 @@ class _DetailsPageState extends State<DetailsPage> {
       body: userList.isEmpty
           ? const Center(child: Text('No Users Registered'))
           : ListView.builder(
-        itemCount: userList.length,
-        itemBuilder: (context, index) {
-          final user = userList[index];
-          return Card(
-            margin:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            child: ListTile(
-              leading: CircleAvatar(
-                child: Text(user.id.toString()),
-              ),
-              title: Text('${user.fname} ${user.lname}'),
-              subtitle: Text('Marks: ${user.marks}'),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit,
-                        color: Colors.deepPurpleAccent),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              RegisterPage(editingUser: user),
+              itemCount: userList.length,
+              itemBuilder: (context, index) {
+                final user = userList[index];
+                return Card(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      child: Text(user.id.toString()),
+                    ),
+                    title: Text('${user.fname} ${user.lname}'),
+                    subtitle: Text('Marks: ${user.marks}'),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit,
+                              color: Colors.deepPurpleAccent),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    RegisterPage(editingUser: user),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () async {
+                            await deleteUser(user.id!);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () async {
-                      await deleteUser(user.id!);
-                    },
-                  ),
-                ],
-              ),
+                );
+              },
             ),
-          );
-        },
-      ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Colors.deepPurpleAccent,
         foregroundColor: Colors.white,
