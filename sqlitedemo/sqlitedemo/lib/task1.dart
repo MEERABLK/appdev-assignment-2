@@ -4,21 +4,21 @@ import 'package:flutter/services.dart';
 void main() {
 
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
+    const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
       systemNavigationBarColor: Colors.black,
     ),
   );
-  runApp( MyApp());
+  runApp( const MyApp());
 
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: MyRegisterScreen(),
 
 
@@ -38,7 +38,7 @@ class _MyRegisterScreenState extends State<MyRegisterScreen> {
   final TextEditingController _username = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _confirmpass = TextEditingController();
-  final snackBar = SnackBar(content: Text('Passwords dont match!'));
+  final snackBar = const SnackBar(content:  Text('Passwords dont match!'));
 
   void _navigateSecondscreen(){
     //line extracts the text typed by user
@@ -60,7 +60,7 @@ class _MyRegisterScreenState extends State<MyRegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Application',style: TextStyle(color: Colors.white),),
+        title: const Text('My Application',style:  TextStyle(color: Colors.white),),
         backgroundColor:Colors.deepPurpleAccent ,),
       backgroundColor: Colors.lightBlueAccent,
       // systemOverlayStyle: SystemUiOverlayStyle(
@@ -73,23 +73,23 @@ class _MyRegisterScreenState extends State<MyRegisterScreen> {
 
       Column(children: [
 
-        Padding(padding: EdgeInsets.all(75 ),
+        const Padding(padding: EdgeInsets.all(75 ),
           child:
           Text('Registration',style: TextStyle(fontSize: 30),),
         ),
 
-        Padding(padding: EdgeInsets.only(top: 0,left: 80,right: 80,bottom: 20),
+        Padding(padding: const EdgeInsets.only(top: 0,left: 80,right: 80,bottom: 20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
 
               TextField(
                 controller: _username,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'User ID',
                 ),
               ),
-              SizedBox(height: 20
+              const SizedBox(height: 20
                 ,
               ),
 
@@ -756,20 +756,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
           Padding(padding: EdgeInsets.only(top: 100),
             child:
-            Text('Your order has been processed',
+            const Text('Your order has been processed',
                 style:
-                const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                 TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
           ),
-          SizedBox(
+          const SizedBox(
             width: 300, // desired width
-            child: Divider(
+            child:  Divider(
               color: Colors.black,
 thickness: 1.5,
             ),
           ),
 
-          Padding(padding: EdgeInsets.only(top: 100),
+          Padding(padding: const EdgeInsets.only(top: 100),
             child:
 
             Text('Please Pay: ${widget.totalCost.toString()} CAD for confirmation',
@@ -777,9 +777,9 @@ thickness: 1.5,
                 const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
 
-          SizedBox(
+          const SizedBox(
             width:330, // desired width
-            child: Divider(
+            child:  Divider(
               color: Colors.black,
               thickness: 1.5,
             ),
@@ -795,8 +795,8 @@ thickness: 1.5,
                   borderRadius: BorderRadius.circular(5)),
             ),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content:  Text(
                       'RETURNING TO HOME PAGE')));
               Navigator.push(
                 context,
